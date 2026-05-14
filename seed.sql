@@ -1,4 +1,5 @@
 -- Namu Wellness - Seed Data
+SET NAMES 'utf8mb4';
 
 CREATE TABLE IF NOT EXISTS programs (
   id INT AUTO_INCREMENT PRIMARY KEY,
