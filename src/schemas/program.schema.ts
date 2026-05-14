@@ -15,4 +15,11 @@ export const createProgramSchema = z.object({
   duration_weeks: z.number().min(1),
 })
 
+export const queryFilterProgramSchema = z.object({
+  page: z.coerce.number().min(1).optional(),
+  limit: z.coerce.number().min(1).max(100).optional()
+})
+
 export type CreateProgramData = z.infer<typeof createProgramSchema>
+export type queryFilterProgramData = z.infer<typeof queryFilterProgramSchema>
+

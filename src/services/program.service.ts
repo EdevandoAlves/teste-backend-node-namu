@@ -22,4 +22,22 @@ export class ProgramService {
 
     return program
   }
+
+  async listProgram(page?: number, limit?: number) {
+    page = page ?? 1
+    limit = limit ?? 10
+
+    const [programs, total] = await this.programRepo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit
+    })
+
+    return {
+      data: programs,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  }
 }
