@@ -13,7 +13,7 @@ import { ProgramService } from '../services/program.service'
 const programService = new ProgramService()
 
 export async function createProgram(
-  req: Request<{}, {}, CreateProgramData, {}>,
+  req: Request<unknown, unknown, CreateProgramData, unknown>,
   res: Response,
   next: NextFunction
 ) {
@@ -29,7 +29,7 @@ export async function createProgram(
 }
 
 export async function listProgram(
-  req: Request<{}, {}, {}, QueryFilterProgramData>,
+  req: Request<unknown, unknown, unknown, QueryFilterProgramData>,
   res: Response,
   next: NextFunction
 ) {
@@ -44,7 +44,7 @@ export async function listProgram(
 }
 
 export async function updateProgram(
-  req: Request<{ id: number }, {}, UpdateProgramData, {}>,
+  req: Request<{ id: number }, unknown, UpdateProgramData, unknown>,
   res: Response,
   next: NextFunction
 ) {
