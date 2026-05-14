@@ -1,0 +1,36 @@
+{
+  "name": "teste-backend-node-namu",
+  "version": "1.0.0",
+  "description": "Empresa: Namu (Saúde e Bem-Estar) Nível: Júnior / Pleno (mesmo teste, avaliação pela qualidade da entrega) Tempo estimado: 3 a 4 horas Prazo de entrega: 7 dias corridos Entrega: repositório público no GitHub",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdevandoAlves/teste-backend-node-namu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EdevandoAlves/teste-backend-node-namu/issues"
+  },
+  "homepage": "https://github.com/EdevandoAlves/teste-backend-node-namu#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.29",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.7.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
+  }
+}
