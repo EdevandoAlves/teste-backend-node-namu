@@ -1,13 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
-import { Activity } from "./Activity"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm'
+import { Activity } from './Activity'
 
 export enum ProgramCategory {
-  MEDITACAO = "meditação",
-  EXERCICIO = "exercício",
-  NUTRICAO = "nutrição"
+  MEDITACAO = 'meditação',
+  EXERCICIO = 'exercício',
+  NUTRICAO = 'nutrição',
 }
 
-@Entity("programs")
+@Entity('programs')
 export class Program {
   @PrimaryGeneratedColumn()
   id!: number
@@ -15,12 +22,12 @@ export class Program {
   @Column()
   name!: string
 
-  @Column("text")
+  @Column('text')
   description!: string
 
   @Column({
-    type: "enum",
-    enum: ProgramCategory
+    type: 'enum',
+    enum: ProgramCategory,
   })
   category!: ProgramCategory
 

@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm"
-import { Activity } from "./Activity"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm'
+import { Activity } from './Activity'
 
-@Entity("participations")
+@Entity('participations')
 export class Participation {
   @PrimaryGeneratedColumn()
   id!: number
@@ -13,12 +20,12 @@ export class Participation {
   activity_id!: number
 
   @ManyToOne(() => Activity, (activity) => activity.participations)
-  @JoinColumn({ name: "activity_id" })
+  @JoinColumn({ name: 'activity_id' })
   activity!: Activity
 
   @CreateDateColumn()
   completed_at!: Date
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: 'text', nullable: true })
   notes!: string
 }

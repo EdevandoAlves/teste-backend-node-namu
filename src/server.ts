@@ -1,7 +1,6 @@
-import "reflect-metadata"
-import { app } from "./app"
-import { AppDataSource } from "./database/data-source"
-
+import 'reflect-metadata'
+import { app } from './app'
+import { AppDataSource } from './database/data-source'
 
 AppDataSource.initialize()
   .then(() => {
@@ -14,4 +13,3 @@ AppDataSource.initialize()
   .catch((err) => {
     console.error(err)
   })
-
