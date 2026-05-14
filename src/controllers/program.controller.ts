@@ -59,13 +59,16 @@ export async function updateProgram(
   }
 }
 
-export async function deleteProgram(req: Request<{ id: number }>, res: Response, next: NextFunction) {
+export async function deleteProgram(
+  req: Request<{ id: number }>,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { id } = idSchema.parse(req.params)
 
     await programService.deleteProgram(id)
-    return res.status(200).send({ message: "program successfully deleted" })
-
+    return res.status(200).send({ message: 'program successfully deleted' })
   } catch (err) {
     next(err)
   }

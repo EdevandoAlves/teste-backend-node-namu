@@ -71,13 +71,13 @@ export class ProgramService {
 
   async deleteProgram(id: number) {
     const program = await this.programRepo.findOne({
-      where: { id }
+      where: { id },
     })
 
     if (!program) {
       throw new AppError('Program not found', 404)
     }
 
-    return await this.programRepo.delete(id);
+    return await this.programRepo.delete(id)
   }
 }

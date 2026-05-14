@@ -15,5 +15,6 @@ export const AppDataSource = new DataSource({
   charset: 'utf8mb4',
 
   synchronize: false,
+  migrations: ['src/database/migrations/*.ts'],
   entities: [Program, Activity, Participation],
 })
