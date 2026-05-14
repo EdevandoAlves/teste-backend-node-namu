@@ -17,9 +17,15 @@ export const createProgramSchema = z.object({
 
 export const queryFilterProgramSchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  limit: z.coerce.number().min(1).max(100).optional()
+  limit: z.coerce.number().min(1).max(100).optional(),
 })
 
-export type CreateProgramData = z.infer<typeof createProgramSchema>
-export type queryFilterProgramData = z.infer<typeof queryFilterProgramSchema>
+export const idSchema = z.object({
+  id: z.coerce.number().int().positive(),
+})
 
+export const updateProgramSchema = createProgramSchema.partial()
+
+export type CreateProgramData = z.infer<typeof createProgramSchema>
+export type QueryFilterProgramData = z.infer<typeof queryFilterProgramSchema>
+export type UpdateProgramData = z.infer<typeof updateProgramSchema>

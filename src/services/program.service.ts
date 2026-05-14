@@ -1,7 +1,8 @@
 import { AppDataSource } from '../database/data-source'
 import { Program } from '../entities/Program'
-import { CreateProgramData } from '../schemas/program.schema'
+import { CreateProgramData, UpdateProgramData } from '../schemas/program.schema'
 import { AppError } from '../errors/AppError'
+import { Not } from 'typeorm'
 
 export class ProgramService {
   private programRepo = AppDataSource.getRepository(Program)
@@ -29,7 +30,7 @@ export class ProgramService {
 
     const [programs, total] = await this.programRepo.findAndCount({
       skip: (page - 1) * limit,
-      take: limit
+      take: limit,
     })
 
     return {
@@ -37,7 +38,46 @@ export class ProgramService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit)
+      totalPages: Math.ceil(total / limit),
     }
+  }
+
+  async updateProgram(id: number, data: UpdateProgramData) {
+    const program = await this.programRepo.findOne({
+      where: { id },
+    })
+
+    if (!program) {
+      throw new AppError('Program not found', 404)
+    }
+
+    if (data.name) {
+      const existingProgram = await this.programRepo.findOne({
+        where: {
+          name: data.name,
+          id: Not(id),
+        },
+      })
+
+      if (existingProgram) {
+        throw new AppError('Program already exists', 400)
+      }
+    }
+
+    Object.assign(program, data)
+
+    return this.programRepo.save(program)
+  }
+
+  async deleteProgram(id: number) {
+    const program = await this.programRepo.findOne({
+      where: { id }
+    })
+
+    if (!program) {
+      throw new AppError('Program not found', 404)
+    }
+
+    return await this.programRepo.delete(id);
   }
 }

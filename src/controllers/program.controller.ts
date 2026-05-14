@@ -1,11 +1,19 @@
 import { Request, Response, NextFunction } from 'express'
-import { createProgramSchema, queryFilterProgramData, queryFilterProgramSchema } from '../schemas/program.schema'
+import {
+  CreateProgramData,
+  createProgramSchema,
+  idSchema,
+  QueryFilterProgramData,
+  queryFilterProgramSchema,
+  UpdateProgramData,
+  updateProgramSchema,
+} from '../schemas/program.schema'
 import { ProgramService } from '../services/program.service'
 
 const programService = new ProgramService()
 
 export async function createProgram(
-  req: Request,
+  req: Request<{}, {}, CreateProgramData, {}>,
   res: Response,
   next: NextFunction
 ) {
@@ -20,9 +28,13 @@ export async function createProgram(
   }
 }
 
-export async function listProgram(req: Request<{}, {}, {}, queryFilterProgramData>, res: Response, next: NextFunction) {
+export async function listProgram(
+  req: Request<{}, {}, {}, QueryFilterProgramData>,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const { limit, page } = queryFilterProgramSchema.parse(req.query);
+    const { limit, page } = queryFilterProgramSchema.parse(req.query)
 
     const programs = await programService.listProgram(page, limit)
     return res.status(200).json(programs)
@@ -31,3 +43,30 @@ export async function listProgram(req: Request<{}, {}, {}, queryFilterProgramDat
   }
 }
 
+export async function updateProgram(
+  req: Request<{ id: number }, {}, UpdateProgramData, {}>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = idSchema.parse(req.params)
+    const data = updateProgramSchema.parse(req.body)
+
+    const updatedProgram = await programService.updateProgram(id, data)
+    return res.status(200).send(updatedProgram)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function deleteProgram(req: Request<{ id: number }>, res: Response, next: NextFunction) {
+  try {
+    const { id } = idSchema.parse(req.params)
+
+    await programService.deleteProgram(id)
+    return res.status(200).send({ message: "program successfully deleted" })
+
+  } catch (err) {
+    next(err)
+  }
+}
