@@ -65,7 +65,6 @@ export class ActivityService {
     const existingActivity = await this.activityRepo.findOne({
       where: { id: activityId, program_id: id },
     })
-    console.log(existingActivity)
 
     if (!existingActivity) {
       throw new AppError('Activity not found', 404)
