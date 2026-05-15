@@ -41,7 +41,7 @@ export async function createActivities(
     const body = createActivitiesSchema.parse(req.body)
 
     const activity = await activityService.createActivities(id, body)
-    return res.status(200).json(activity)
+    return res.status(201).json(activity)
   } catch (err) {
     next(err)
   }
