@@ -70,7 +70,7 @@ export async function deleteProgram(
     const { id } = idSchema.parse(req.params)
 
     await programService.deleteProgram(id)
-    return res.status(200).send({ message: 'program successfully deleted' })
+    return res.status(204).send({ message: 'program successfully deleted' })
   } catch (err) {
     next(err)
   }

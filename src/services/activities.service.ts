@@ -2,7 +2,10 @@ import { AppDataSource } from '../database/data-source'
 import { Activity } from '../entities/Activity'
 import { Program } from '../entities/Program'
 import { AppError } from '../errors/AppError'
-import { createActivitiesData, updateActivitierData } from '../schemas/activities.schema'
+import {
+  createActivitiesData,
+  updateActivitierData,
+} from '../schemas/activities.schema'
 
 export class ActivityService {
   private activityRepo = AppDataSource.getRepository(Activity)
@@ -48,7 +51,11 @@ export class ActivityService {
     return activity
   }
 
-  async updateActivities(id: number, activityId: number, body: updateActivitierData) {
+  async updateActivities(
+    id: number,
+    activityId: number,
+    body: updateActivitierData
+  ) {
     const existingProgram = await this.programRepo.findOne({ where: { id } })
 
     if (!existingProgram) {
@@ -56,9 +63,9 @@ export class ActivityService {
     }
 
     const existingActivity = await this.activityRepo.findOne({
-      where: { id: activityId, program_id: id }
+      where: { id: activityId, program_id: id },
     })
-    console.log(existingActivity);
+    console.log(existingActivity)
 
     if (!existingActivity) {
       throw new AppError('Activity not found', 404)
@@ -69,5 +76,20 @@ export class ActivityService {
     await this.activityRepo.save(existingActivity)
 
     return existingActivity
+  }
+
+  async deleteActivities(id: number, activityId: number) {
+    const activity = await this.activityRepo.findOne({
+      where: {
+        id: activityId,
+        program_id: id,
+      },
+    })
+
+    if (!activity) {
+      throw new AppError('Activity not found', 404)
+    }
+
+    await this.activityRepo.delete({ id: activityId, program_id: id })
   }
 }

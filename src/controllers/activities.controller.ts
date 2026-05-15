@@ -48,7 +48,11 @@ export async function createActivities(
 }
 
 export async function updateActivities(
-  req: Request<{ id: number, activityId: number }, unknown, updateActivitierData>,
+  req: Request<
+    { id: number; activityId: number },
+    unknown,
+    updateActivitierData
+  >,
   res: Response,
   next: NextFunction
 ) {
@@ -56,8 +60,27 @@ export async function updateActivities(
     const { id, activityId } = paramsSchema.parse(req.params)
     const body = updateActivitierSchema.parse(req.body)
 
-    const updatedActivity = await activityService.updateActivities(id, activityId, body)
+    const updatedActivity = await activityService.updateActivities(
+      id,
+      activityId,
+      body
+    )
     return res.status(400).send(updatedActivity)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function deleteActivities(
+  req: Request<{ id: number; activityId: number }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id, activityId } = paramsSchema.parse(req.params)
+
+    await activityService.deleteActivities(id, activityId)
+    return res.status(204).send({ message: 'Activity successfully deleted' })
   } catch (err) {
     next(err)
   }

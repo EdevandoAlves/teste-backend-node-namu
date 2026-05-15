@@ -11,7 +11,7 @@ export const idSchema = z.object({
 
 export const paramsSchema = z.object({
   id: z.coerce.number().int().positive(),
-  activityId: z.coerce.number().int().positive()
+  activityId: z.coerce.number().int().positive(),
 })
 
 export type PaginationQueryData = z.infer<typeof paginationQuerySchema>
