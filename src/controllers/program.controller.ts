@@ -2,12 +2,14 @@ import { Request, Response, NextFunction } from 'express'
 import {
   CreateProgramData,
   createProgramSchema,
-  idSchema,
-  QueryFilterProgramData,
-  queryFilterProgramSchema,
   UpdateProgramData,
   updateProgramSchema,
 } from '../schemas/program.schema'
+import {
+  PaginationQueryData,
+  paginationQuerySchema,
+  idSchema,
+} from '../schemas/utils.schema'
 import { ProgramService } from '../services/program.service'
 
 const programService = new ProgramService()
@@ -29,12 +31,12 @@ export async function createProgram(
 }
 
 export async function listProgram(
-  req: Request<unknown, unknown, unknown, QueryFilterProgramData>,
+  req: Request<unknown, unknown, unknown, PaginationQueryData>,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const { limit, page } = queryFilterProgramSchema.parse(req.query)
+    const { limit, page } = paginationQuerySchema.parse(req.query)
 
     const programs = await programService.listProgram(page, limit)
     return res.status(200).json(programs)
