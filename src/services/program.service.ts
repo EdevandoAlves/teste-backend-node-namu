@@ -80,4 +80,6 @@ export class ProgramService {
 
     return await this.programRepo.delete(id)
   }
+
+  async summary() {}
 }

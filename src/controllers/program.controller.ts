@@ -75,3 +75,9 @@ export async function deleteProgram(
     next(err)
   }
 }
+
+export async function summary(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {}

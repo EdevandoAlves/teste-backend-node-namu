@@ -9,6 +9,7 @@ import {
 const programRouter = Router()
 
 programRouter.get('/', listProgram)
+programRouter.get('/:id/summary')
 programRouter.post('/', createProgram)
 programRouter.patch('/:id', updateProgram)
 programRouter.delete('/:id', deleteProgram)
