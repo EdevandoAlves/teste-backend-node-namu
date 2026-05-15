@@ -1,5 +1,5 @@
-import { z } from "zod"
-import { DayOfWeek } from "../entities/Activity"
+import { z } from 'zod'
+import { DayOfWeek } from '../entities/Activity'
 
 export const createActivitiesSchema = z.object({
   title: z.string(),
@@ -13,10 +13,13 @@ export const createActivitiesSchema = z.object({
     DayOfWeek.QUARTA,
     DayOfWeek.QUINTA,
     DayOfWeek.SEXTA,
-    DayOfWeek.SABADO
+    DayOfWeek.SABADO,
   ]),
 
-  duration_minutes: z.number().positive()
+  duration_minutes: z.number().positive(),
 })
 
+export const updateActivitierSchema = createActivitiesSchema.partial()
+
 export type createActivitiesData = z.infer<typeof createActivitiesSchema>
+export type updateActivitierData = z.infer<typeof updateActivitierSchema>
