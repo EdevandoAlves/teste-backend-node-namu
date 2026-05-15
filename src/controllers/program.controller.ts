@@ -77,7 +77,16 @@ export async function deleteProgram(
 }
 
 export async function summary(
-  req: Request,
+  req: Request<{ id: number }>,
   res: Response,
   next: NextFunction
-) {}
+) {
+  try {
+    const { id } = idSchema.parse(req.params)
+
+    const summary = await programService.summary(id)
+    return res.status(200).send(summary)
+  } catch (err) {
+    next(err)
+  }
+}

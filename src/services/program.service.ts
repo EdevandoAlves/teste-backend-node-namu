@@ -3,9 +3,13 @@ import { Program } from '../entities/Program'
 import { CreateProgramData, UpdateProgramData } from '../schemas/program.schema'
 import { AppError } from '../errors/AppError'
 import { Not } from 'typeorm'
+import { Activity } from '../entities/Activity'
+import { Participation } from '../entities/Participation'
 
 export class ProgramService {
   private programRepo = AppDataSource.getRepository(Program)
+  private activityRepo = AppDataSource.getRepository(Activity)
+  private participationRepo = AppDataSource.getRepository(Participation)
 
   async createProgram(data: CreateProgramData) {
     const existingProgram = await this.programRepo.findOne({
@@ -81,5 +85,33 @@ export class ProgramService {
     return await this.programRepo.delete(id)
   }
 
-  async summary() {}
+  async summary(id: number) {
+
+    const totalActivities = await this.activityRepo.count({
+      where: {
+        program_id: id
+      }
+    })
+
+    const totalParticipations = await this.participationRepo.createQueryBuilder('participation')
+      .innerJoin('participation.activity', 'activity')
+      .where('activity.program_id = :id', { id })
+      .getCount()
+
+    const topParticipants = await this.participationRepo.createQueryBuilder('participation')
+      .select('participation.user_name', 'user_name')
+      .addSelect('count(*)', 'total')
+      .innerJoin('participation.activity', 'activity')
+      .where('activity.program_id = :id', { id })
+      .groupBy('participation.user_name')
+      .orderBy('total', 'DESC')
+      .limit(5)
+      .getRawMany()
+
+    return {
+      totalActivities,
+      totalParticipations,
+      topParticipants
+    }
+  }
 }
