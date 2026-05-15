@@ -65,7 +65,7 @@ export async function updateActivities(
       activityId,
       body
     )
-    return res.status(400).send(updatedActivity)
+    return res.status(200).send(updatedActivity)
   } catch (err) {
     next(err)
   }
