@@ -86,19 +86,20 @@ export class ProgramService {
   }
 
   async summary(id: number) {
-
     const totalActivities = await this.activityRepo.count({
       where: {
-        program_id: id
-      }
+        program_id: id,
+      },
     })
 
-    const totalParticipations = await this.participationRepo.createQueryBuilder('participation')
+    const totalParticipations = await this.participationRepo
+      .createQueryBuilder('participation')
       .innerJoin('participation.activity', 'activity')
       .where('activity.program_id = :id', { id })
       .getCount()
 
-    const topParticipants = await this.participationRepo.createQueryBuilder('participation')
+    const topParticipants = await this.participationRepo
+      .createQueryBuilder('participation')
       .select('participation.user_name', 'user_name')
       .addSelect('count(*)', 'total')
       .innerJoin('participation.activity', 'activity')
@@ -111,7 +112,7 @@ export class ProgramService {
     return {
       totalActivities,
       totalParticipations,
-      topParticipants
+      topParticipants,
     }
   }
 }
