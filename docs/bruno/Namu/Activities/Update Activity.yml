@@ -1,0 +1,21 @@
+info:
+  name: Update Activity
+  type: http
+  seq: 1
+
+http:
+  method: PATCH
+  url: http://localhost:3000/programs/1/activities/3
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Consciencia"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

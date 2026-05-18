@@ -1,0 +1,23 @@
+info:
+  name: Participations
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: http://localhost:3000/participations
+  body:
+    type: json
+    data: |-
+      {
+        "user_name": "Ana Setubal",
+        "activity_id": 1,
+        "notes": "Completei"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,24 @@
+info:
+  name: Program
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:3000/programs/
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Yoga",
+        "description": "faca yoga meu lindo",
+        "category": "exercício",
+        "duration_weeks": 2
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

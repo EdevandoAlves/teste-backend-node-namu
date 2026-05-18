@@ -1,0 +1,24 @@
+info:
+  name: Activity
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:3000/programs/1/activities
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Respiracao espaçada 23",
+        "description": "inpire e expire",
+        "day_of_week": "domingo",
+        "duration_minutes": 10
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
