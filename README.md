@@ -69,6 +69,20 @@ A API estará disponível em `http://localhost:3000`.
 
 ---
 
+## Collection
+
+A collection da API está disponível na pasta:
+
+```bash
+/docs/bruno/Namu
+```
+
+A colletion foi criada utilizando o Bruno e contém exemplos de requests para:
+- Programs 
+- Activities 
+- Participations 
+- Summary
+
 ## Endpoints
 
 ### Programas
@@ -121,6 +135,7 @@ Dias válidos: `segunda` | `terça` | `quarta` | `quinta` | `sexta` | `sábado` 
 ## Estrutura do Projeto
 
 ```
+docs/               # Collection com as requests
 src/
 ├── __tests__/      # Testes unitários
 ├── controllers/    # Recebe a requisição, chama o service, retorna a resposta
