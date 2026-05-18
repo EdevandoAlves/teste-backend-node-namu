@@ -1,18 +1,52 @@
-import { ProgramCategory } from '../entities/Program'
+import { Program, ProgramCategory } from '../entities/Program'
 import { CreateProgramData } from '../schemas/program.schema'
 import { ProgramService } from '../services/program.service'
 import { AppError } from '../errors/AppError'
+import { Activity } from '../entities/Activity'
+import { Participation } from '../entities/Participation'
 
-const mockRepository = {
+const mockProgramRepository = {
   create: jest.fn(),
   save: jest.fn(),
   findOne: jest.fn(),
   findAndCount: jest.fn(),
 }
 
+const mockActivityRepository = {
+  count: jest.fn(),
+}
+
+const mockParticipationRepository = {
+  createQueryBuilder: jest.fn(),
+}
+
+const mockQueryBuilder = {
+  innerJoin: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  select: jest.fn().mockReturnThis(),
+  addSelect: jest.fn().mockReturnThis(),
+  groupBy: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  getCount: jest.fn(),
+  getRawMany: jest.fn(),
+}
+
 jest.mock('../database/data-source', () => ({
   AppDataSource: {
-    getRepository: () => mockRepository,
+    getRepository: (entity: unknown) => {
+      if (entity === Program) {
+        return mockProgramRepository
+      }
+
+      if (entity === Activity) {
+        return mockActivityRepository
+      }
+
+      if (entity === Participation) {
+        return mockParticipationRepository
+      }
+    },
   },
 }))
 
@@ -36,24 +70,24 @@ describe('Program Service', () => {
       ...data,
     }
 
-    mockRepository.create.mockReturnValue(createdProgram)
+    mockProgramRepository.create.mockReturnValue(createdProgram)
 
-    mockRepository.save.mockResolvedValue(createdProgram)
+    mockProgramRepository.save.mockResolvedValue(createdProgram)
 
     const result = await service.createProgram(data)
 
-    expect(mockRepository.create).toHaveBeenCalledWith(data)
-    expect(mockRepository.save).toHaveBeenCalledWith(createdProgram)
+    expect(mockProgramRepository.create).toHaveBeenCalledWith(data)
+    expect(mockProgramRepository.save).toHaveBeenCalledWith(createdProgram)
     expect(result).toEqual(createdProgram)
   })
 
   it('should throw AppError when program already exists', async () => {
-    mockRepository.findOne.mockResolvedValue(data)
+    mockProgramRepository.findOne.mockResolvedValue(data)
 
     await expect(service.createProgram(data)).rejects.toThrow(
       new AppError('Program already exists')
     )
-    expect(mockRepository.findOne).toHaveBeenCalledWith({
+    expect(mockProgramRepository.findOne).toHaveBeenCalledWith({
       where: {
         name: data.name,
       },
@@ -85,11 +119,11 @@ describe('Program Service', () => {
 
     const total = 2
 
-    mockRepository.findAndCount.mockResolvedValue([programsMock, total])
+    mockProgramRepository.findAndCount.mockResolvedValue([programsMock, total])
 
     const result = await service.listProgram(pagination.page, pagination.limit)
 
-    expect(mockRepository.findAndCount).toHaveBeenCalledWith({
+    expect(mockProgramRepository.findAndCount).toHaveBeenCalledWith({
       skip: 0,
       take: 10,
     })
@@ -100,6 +134,50 @@ describe('Program Service', () => {
       page: pagination.page,
       limit: pagination.limit,
       totalPages: Math.ceil(total / pagination.limit),
+    })
+  })
+
+  it('should return program summary', async () => {
+    mockActivityRepository.count.mockResolvedValue(4)
+
+    mockParticipationRepository.createQueryBuilder.mockReturnValue(
+      mockQueryBuilder
+    )
+
+    mockQueryBuilder.getCount.mockResolvedValue(20)
+
+    mockQueryBuilder.getRawMany.mockResolvedValue([
+      {
+        user_name: 'user test 1',
+        total: 7,
+      },
+      {
+        user_name: 'user test 2',
+        total: 4,
+      },
+    ])
+
+    const result = await service.summary(1)
+
+    expect(mockActivityRepository.count).toHaveBeenCalledWith({
+      where: { program_id: 1 },
+    })
+    expect(mockParticipationRepository.createQueryBuilder).toHaveBeenCalledWith(
+      'participation'
+    )
+    expect(result).toEqual({
+      totalActivities: 4,
+      totalParticipations: 20,
+      topParticipants: [
+        {
+          user_name: 'user test 1',
+          total: 7,
+        },
+        {
+          user_name: 'user test 2',
+          total: 4,
+        },
+      ],
     })
   })
 })
